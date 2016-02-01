@@ -82,7 +82,7 @@ def termino(diaInicio, horaInicio, backup, pathlog):
     backup = backup.replace('tar cvf', '')
     final = '''
   ===========================================================================
-                            BACKUP FULL FINALIZADO
+                            BACKUP DIFERENCIAL FINALIZADO
 
                 HORA INICIAL:    %s  -  %s
                 HORA FINAL  :    %s  -  %s
@@ -142,6 +142,10 @@ def backupclone():
     l = open(pathlog, 'w')
     l.write(start)
     l.close()
+
+    #Monta todos os discos presentes no fstab
+    mount = 'mount -a'
+    subprocess.call(mount, shell=True)
 
     #RODA O BACKUP
     subprocess.call(backup + log, shell=True)
