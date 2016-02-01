@@ -96,9 +96,9 @@ def termino(diaInicio, horaInicio, backup, pathlog):
 
 #ESSA FUNÇÃO DESMONTA O HD DE BACKUP POR SEGURANÇA.
 #DESCOMENTE A LINHA desmonta_hd() DENTRO DE backupclone() PARA UTILIZÁ-LA
-def desmonta_hd(particaobak):
+def desmonta_hd(disk):
     try:
-        umount = 'umount %s' % particaobak
+        umount = 'umount %s' % disk
         subprocess.call(umount, shell=True)
     except:
         return False
@@ -131,7 +131,7 @@ def gerabackup():
 
 #CRIA OS BACKUPs
 def backupclone():
-    particaobak = '/dev/sdc'    # Aqui defina a partição que contém o disco que será realizado para guardar o backup
+    disk        = '/dev/sdc'    # Aqui defina a partição que contém o disco que será realizado para guardar o backup
     horaInicio  = time.strftime('%H:%M:%S')
     pathlog     = geralog()
     backup      = gerabackup()
@@ -154,7 +154,7 @@ def backupclone():
     r.close()
 
     #Caso seja necessário que o HD que guarda o Backup seja desmontado por segurança, descomente essa linha
-    desmonta_hd(particaobak)
+    #desmonta_hd(disk)
 
 
 #Chama a função Main

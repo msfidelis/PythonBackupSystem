@@ -46,6 +46,17 @@ def termino(diaInicio, horaInicio, backup, pathlog):
     return final
 
 
+#ESSA FUNÇÃO DESMONTA O HD DE BACKUP POR SEGURANÇA.
+#DESCOMENTE A LINHA desmonta_hd() DENTRO DE backupfull() PARA UTILIZÁ-LA
+def desmonta_hd(disk):
+    try:
+        umount = 'umount %s' % disk
+        subprocess.call(umount, shell=True)
+        return True
+    except:
+        return False
+
+
 #CONSTROI OS LOGS DO SISTEMA - Aqui selecionamos o nome do backup e o arquivo de logs que iremos criar.
 def geralog():
     date = (time.strftime("%Y-%m-%d"))              #
@@ -68,6 +79,7 @@ def gerabackup():
 
 #CRIA OS BACKUPs
 def backupfull():
+    disk        = '/dev/sdb'        #Define onde está a partição que será usada para guardar o backup
     horaInicio  = time.strftime('%H:%M:%S')
     pathlog     = geralog()
     backup      = gerabackup()
@@ -79,6 +91,10 @@ def backupfull():
     l.write(start)
     l.close()
 
+    #Monta todos os discos que estão no FSTAB
+    mount = 'mount -a'
+    subprocess.call(mount, shell=True)
+
     #RODA O BACKUP
     subprocess.call(backup + log, shell=True)
 
@@ -89,6 +105,7 @@ def backupfull():
     r.write(final)
     r.close()
 
-
+    #Descomente essa função para desmontar a partição que será utilizada para armazenar o backup
+    #desmonta_hd(disk)
 
 backupfull()
